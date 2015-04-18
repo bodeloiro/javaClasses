@@ -5,61 +5,87 @@ import java.util.ArrayList;
 
 import javax.swing.JSplitPane;
 
-public class MultSplitTabs extends JSplitPane{
-	private ArrayList<JSplitPane> splitPaneEncapList = new ArrayList<JSplitPane>();
-	private int numeroDeComponentes = 1;
-	private int size = 6;
-	
-	public MultSplitTabs() {
+/**
+ * This Components is based on the JSplitPane. JSplitPane is used to divide two
+ * (and only two) Components. This class intend to manipulate the JSplitPane in
+ * a way that can be placed as many Component as wanted.
+ * 
+ * @author Bode
+ *
+ */
+public class JSplitPaneMultiTabs extends JSplitPane {
+	private ArrayList<JSplitPane> ecanpsulationList = new ArrayList<JSplitPane>();
+	private int numberOfComponents = 1;
+	private int sizeOfDivision = 6;
+
+	/**
+	 * Builds the Pane
+	 */
+	public JSplitPaneMultiTabs() {
 		super();
 		this.setLeftComponent(null);
-		splitPaneEncapList.add(this);
-		setBordas(size);
-		
-
+		this.setBorder(null);
+		ecanpsulationList.add(this);
+		setAllBorders(sizeOfDivision);
 	}
-	
-	public void addComponent(Component comp){
+
+	/**
+	 * 
+	 * @param comp - adds a Component to the Pane
+	 */
+	public void addComponent(Component comp) {
 		JSplitPane capsule = new JSplitPane();
-		
+
 		capsule.setRightComponent(null);
 		capsule.setLeftComponent(comp);
-		
-		splitPaneEncapList.get(splitPaneEncapList.size() - 1).setRightComponent(capsule);
-		splitPaneEncapList.add(capsule);
-		numeroDeComponentes++;
-		ajusta();
-		setBordas(size);
+		capsule.setDividerSize(sizeOfDivision);
+		capsule.setBorder(null);
+
+		ecanpsulationList.get(numberOfComponents - 1).setRightComponent(capsule);
+		ecanpsulationList.add(capsule);
+		numberOfComponents++;
+		this.fixWeights();
 	}
-	
-	public void setOrientacao(int orientation) {
-		for (int i = 0; i < splitPaneEncapList.size(); i++) {
-			splitPaneEncapList.get(i).setOrientation(orientation);
-			
+
+	/**
+	 * 
+	 * @param orientation
+	 *            JSplitPane.HORIZONTAL_SPLIT - sets the orientation of the
+	 *            Components to horizontal alignment
+	 * @param orientation
+	 *            JSplitPane.VERTICAL_SPLIT - sets the orientation of the
+	 *            Components to vertical alignment
+	 */
+	public void setAlignment(int orientation) {
+		for (int i = 0; i < numberOfComponents; i++) {
+			ecanpsulationList.get(i).setOrientation(orientation);
+
 		}
 	}
-	
-	public void ajusta(){
-		splitPaneEncapList.get(0).setResizeWeight(1.0);
-		for (int i = 1; i < numeroDeComponentes; i++) {
-			double resize = (double)1 / (double)(i + 1);
-			splitPaneEncapList.get(numeroDeComponentes - i -1).setResizeWeight(resize);
-			
-		}
-		splitPaneEncapList.get(numeroDeComponentes - 1).setResizeWeight(0.0);
-	}
-	
-	public void setBordas(int newSize){
+
+	/**
+	 * 
+	 * @param newSize - resizes the borders of the all the Components of the Screen
+	 */
+	public void setAllBorders(int newSize) {
 		this.setDividerSize(newSize);
-		for (int i = 0; i < splitPaneEncapList.size(); i++) {
-			splitPaneEncapList.get(i).setDividerSize(newSize);
-			splitPaneEncapList.get(i).setBorder(null);
-			
+		for (int i = 0; i < numberOfComponents; i++) {
+			ecanpsulationList.get(i).setDividerSize(newSize);
 		}
-		
-		
+
 	}
-	
-	
-	
+
+	/**
+	 * each Component added needs to be readapteded to the screen
+	 */
+	private void fixWeights() {
+		ecanpsulationList.get(0).setResizeWeight(1.0);
+		for (int i = 1; i < numberOfComponents; i++) {
+			double resize = (double) 1 / (double) (i + 1);
+			ecanpsulationList.get(numberOfComponents - i - 1).setResizeWeight(
+					resize);
+		}
+		ecanpsulationList.get(numberOfComponents - 1).setResizeWeight(0.0);
+	}
+
 }
